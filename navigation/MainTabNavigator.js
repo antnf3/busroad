@@ -10,7 +10,7 @@ import HomeScreen from "../screens/HomeScreen";
 import SubTabNavigator from "./SubTabNavigator";
 import MyAroundScreen from "../screens/MyAroundScreen";
 import StationScreen from "../screens/modals/Station";
-import StationDetailScreen from "../screens/modals/StationDetail";
+import BusDetailScreen from "../screens/modals/BusDetail";
 import BusInfoScreen from "../screens/modals/BusInfo";
 import MyAroundListScreen from "../screens/modals/MyAroundList";
 import MapInfoScreen from "../screens/modals/MapInfo";
@@ -21,11 +21,11 @@ const HomeStack = createStackNavigator(
     Station: {
       screen: StationScreen
     },
-    StationDetail: {
-      screen: StationDetailScreen
-    },
     BusInfo: {
       screen: BusInfoScreen
+    },
+    BusDetail: {
+      screen: BusDetailScreen
     },
     MapInfo: {
       screen: MapInfoScreen

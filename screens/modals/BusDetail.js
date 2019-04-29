@@ -9,15 +9,15 @@ const Container = styled.View`
   background-color: green;
 `;
 
-export default class StationDetailScreen extends React.Component {
+export default class BusDetailScreen extends React.Component {
   static navigationOptions = {
-    title: "정류장 상세정보"
+    title: "버스 상세정보"
   };
 
   render() {
     return (
       <Container>
-        <Text>정류장 상세정보</Text>
+        <Text>버스 상세정보</Text>
         <TouchableOpacity onPressOut={() => this.props.navigation.goBack(null)}>
           <Ionicons
             style={styles.headerBack}
