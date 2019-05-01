@@ -1,9 +1,18 @@
 import React from "react";
-import { TouchableOpacity, StyleSheet, Animated, View } from "react-native";
+import {
+  TouchableOpacity,
+  StyleSheet,
+  Animated,
+  View,
+  Platform,
+  RefreshControl,
+  Text
+} from "react-native";
 import styled from "styled-components";
 import { Ionicons } from "@expo/vector-icons";
 import { withNavigation } from "react-navigation";
 import CardBus from "../../components/CardBus";
+
 const CommonText = styled.Text`
   font-size: ${props => (props.fontSize ? props.fontSize : 16)};
   color: ${props => (props.color ? props.color : "#000")};
@@ -17,7 +26,7 @@ const Container = styled.View`
 
 const HeaderView = styled.View`
   width: 100%;
-  height: 200;
+  height: 150;
   background-color: #4ce347;
   align-items: center;
 `;
@@ -28,13 +37,13 @@ const HeaderNav = styled.View`
   width: 100%;
   height: 50;
   background-color: #4ce347;
+  z-index: 999;
 `;
 const HeaderBtn = styled.View`
   flex: 1;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 100%;
 `;
 
 const MapBtnView = styled.View`
@@ -48,27 +57,36 @@ const MapBtnView = styled.View`
   width: 60;
 `;
 
-const ScrollContainer = styled.ScrollView`
-  flex: 1;
+const ScrollContainer = styled.View`
   background-color: transparent;
-  height: 100%;
-  width: 100%;
-  margin-top: 10;
+  padding-top: 150;
 `;
 
-const HeaderBtnView = ({ goMap, goBusDetail }) => {
+const HEADER_MAX_HEIGHT = 150;
+const HEADER_MIN_HEIGHT = Platform.OS === "ios" ? 60 : 0;
+const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
+
+const HeaderNavView = ({ goBack }) => {
   return (
-    <>
-      <TouchableOpacity onPressOut={goBusDetail}>
-        <InfoBtn />
+    <HeaderNav>
+      <TouchableOpacity onPressOut={goBack}>
+        <Ionicons
+          style={styles.headerBack}
+          color="#fff"
+          size={44}
+          name={"ios-arrow-round-back"}
+        />
       </TouchableOpacity>
-      <TouchableOpacity onPressOut={goMap}>
-        <MapBtn />
+
+      <TouchableOpacity onPressOut={goBack}>
+        <Ionicons
+          style={styles.headerBack}
+          color="#fff"
+          size={36}
+          name={"md-home"}
+        />
       </TouchableOpacity>
-      <TouchableOpacity>
-        <Ionicons color="#fff" size={28} name={"ios-star-outline"} />
-      </TouchableOpacity>
-    </>
+    </HeaderNav>
   );
 };
 
@@ -93,28 +111,24 @@ const MapBtn = () => {
   );
 };
 
-const Header = ({ goBack, goMap, goBusDetail }) => {
+const HeaderBtnView = ({ goMap, goBusDetail }) => {
   return (
-    <Animated.View style={styles.AniHeaderView}>
-      <HeaderNav>
-        <TouchableOpacity onPressOut={goBack}>
-          <Ionicons
-            style={styles.headerBack}
-            color="#fff"
-            size={44}
-            name={"ios-arrow-round-back"}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity onPressOut={goBack}>
-          <Ionicons
-            style={styles.headerBack}
-            color="#fff"
-            size={36}
-            name={"md-home"}
-          />
-        </TouchableOpacity>
-      </HeaderNav>
-
+    <>
+      <TouchableOpacity onPressOut={goBusDetail}>
+        <InfoBtn goBusDetail={goBusDetail} />
+      </TouchableOpacity>
+      <TouchableOpacity onPressOut={goMap}>
+        <MapBtn />
+      </TouchableOpacity>
+      <TouchableOpacity>
+        <Ionicons color="#fff" size={28} name={"ios-star-outline"} />
+      </TouchableOpacity>
+    </>
+  );
+};
+const Header = ({ goMap, goBusDetail }) => {
+  return (
+    <HeaderView>
       <CommonText fontSize={12} color={"#fff"}>
         서울마을버스
       </CommonText>
@@ -124,11 +138,10 @@ const Header = ({ goBack, goMap, goBusDetail }) => {
       <CommonText fontSize={16} color={"#fff"} top={5}>
         {`한일병원 <-> 한일병원`}
       </CommonText>
-
       <HeaderBtn>
         <HeaderBtnView goMap={goMap} goBusDetail={goBusDetail} />
       </HeaderBtn>
-    </Animated.View>
+    </HeaderView>
   );
 };
 
@@ -151,23 +164,53 @@ const ScrollCardCont = ({ goBusInfo }) => {
   );
 };
 
-const HEADER_MAX_HEIGHT = 200;
-const HEADER_MIN_HEIGHT = 60;
-const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
-
 class BusInfoScreen extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      scrollY: new Animated.Value(
+        // iOS has negative initial scroll value because content inset...
+        Platform.OS === "ios" ? -HEADER_MAX_HEIGHT : 0
+      ),
+      refreshing: false
+    };
+  }
+
   static navigationOptions = {
     title: "정류장 정보"
   };
 
-  state = {
-    scrollY: new Animated.Value(0)
-  };
-
   render() {
-    const headerHeight = this.state.scrollY.interpolate({
+    const scrollY = Animated.add(
+      this.state.scrollY,
+      Platform.OS === "ios" ? HEADER_MAX_HEIGHT : 0
+    );
+    const headerTranslate = scrollY.interpolate({
       inputRange: [0, HEADER_SCROLL_DISTANCE],
-      outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
+      outputRange: [0, -HEADER_SCROLL_DISTANCE],
+      extrapolate: "clamp"
+    });
+
+    const imageOpacity = scrollY.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+      outputRange: [1, 0.6, 0],
+      extrapolate: "clamp"
+    });
+    const imageTranslate = scrollY.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE],
+      outputRange: [0, 100],
+      extrapolate: "clamp"
+    });
+
+    const titleScale = scrollY.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+      outputRange: [1, 1, 0.8],
+      extrapolate: "clamp"
+    });
+    const titleTranslate = scrollY.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+      outputRange: [0, 0, -8],
       extrapolate: "clamp"
     });
 
@@ -177,20 +220,55 @@ class BusInfoScreen extends React.Component {
     _goBusInfo = () => this.props.navigation.navigate("BusInfo");
     return (
       <Container>
-        <Header
-          goBack={_goBack}
-          goMap={_goMap}
-          goBusDetail={_goBusDetail}
-          style={{ height: headerHeight }}
-        />
-        <ScrollContainer
-          scrollEventThrottle={16}
-          onScroll={Animated.event([
-            { nativeEvent: { contentOffset: { y: this.state.scrollY } } }
-          ])}
+        <HeaderNavView goBack={_goBack} />
+        <Animated.ScrollView
+          style={{
+            flex: 1,
+            backgroundColor: "transparent",
+            height: "100%",
+            width: "100%"
+          }}
+          scrollEventThrottle={1}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { y: this.state.scrollY } } }],
+            { useNativeDriver: true }
+          )}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={() => {
+                this.setState({ refreshing: true });
+                setTimeout(() => this.setState({ refreshing: false }), 1000);
+              }}
+              // Android offset for RefreshControl
+              progressViewOffset={HEADER_MAX_HEIGHT}
+            />
+          }
+          // iOS offset for RefreshControl
+          contentInset={{
+            top: HEADER_MAX_HEIGHT
+          }}
+          contentOffset={{
+            y: -HEADER_MAX_HEIGHT
+          }}
         >
-          <ScrollCardCont goBusInfo={_goBusInfo} />
-        </ScrollContainer>
+          <ScrollContainer>
+            <ScrollCardCont goBusInfo={_goBusInfo} />
+          </ScrollContainer>
+        </Animated.ScrollView>
+
+        <Animated.ScrollView
+          pointerEvents="none"
+          style={[
+            styles.header,
+            {
+              opacity: imageOpacity,
+              transform: [{ translateY: headerTranslate }]
+            }
+          ]}
+        >
+          <Header goMap={_goMap} goBusDetail={_goBusDetail} />
+        </Animated.ScrollView>
       </Container>
     );
   }
@@ -202,14 +280,14 @@ const styles = StyleSheet.create({
     width: 50,
     backgroundColor: "transparent"
   },
-  AniHeaderView: {
+  header: {
     position: "absolute",
-    top: 0,
+    top: 50,
     left: 0,
     right: 0,
-    height: 200,
-    backgroundColor: "#4ce347",
-    alignItems: "center"
+    backgroundColor: "#03A9F4",
+    overflow: "hidden",
+    height: HEADER_MAX_HEIGHT
   }
 });
 
