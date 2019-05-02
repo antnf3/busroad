@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
-
+import HeaderTitle from "../../components/HeaderTitle";
 const Locale = styled.View`
   flex: 1;
   flex-direction: row;
@@ -25,27 +24,6 @@ const LocaleTextMarginLeft = styled(LocaleText)`
 const Container = styled.View`
   flex: 1;
   background-color: #e6e6e6;
-`;
-
-const Header = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  height: 50;
-  background-color: #fff;
-  opacity: 0.6;
-  border-bottom-width: ${StyleSheet.hairlineWidth};
-`;
-
-const HeaderTitle = styled.Text`
-  font-size: 24;
-  color: #4e4a4a;
-`;
-const HeaderTmp = styled.View`
-  background-color: transparent;
-  width: 50;
-  height: 50;
 `;
 
 const Title = styled.View`
@@ -132,25 +110,14 @@ class DrawerLocalArea extends Component {
       </ScrollCard>
     ));
   };
+
+  _goBack = () => this.props.navigation.goBack(null);
+
   render() {
     const { onOff } = this.state;
     return (
       <Container>
-        <Header>
-          <TouchableOpacity
-            onPressOut={() => this.props.navigation.goBack(null)}
-          >
-            <Ionicons
-              style={styles.headerBack}
-              color="black"
-              size={52}
-              name={"ios-arrow-round-back"}
-            />
-          </TouchableOpacity>
-          <HeaderTitle>지역설정</HeaderTitle>
-          <HeaderTmp />
-        </Header>
-
+        <HeaderTitle goBack={this._goBack} htitle={"지역설정"} />
         <Title>
           <TitleLeft>
             <LocaleText fontSize={24} color={"#8D8080"} onOff={onOff}>

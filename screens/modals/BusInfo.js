@@ -11,7 +11,6 @@ import {
 import styled from "styled-components";
 import { Ionicons } from "@expo/vector-icons";
 import { withNavigation } from "react-navigation";
-import CardBus from "../../components/CardBus";
 
 const CommonText = styled.Text`
   font-size: ${props => (props.fontSize ? props.fontSize : 16)};
@@ -145,21 +144,110 @@ const Header = ({ goMap, goBusDetail }) => {
   );
 };
 
-const ScrollCardCont = ({ goBusInfo }) => {
+const ScrollCardLeftView = styled.View`
+  flex: 1;
+  align-items: flex-end;
+  justify-content: ${props => (props.ends ? "flex-start" : "flex-end")};
+`;
+
+const BusIconNumView = styled.View`
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  z-index: 99;
+`;
+const BusIconNum = styled.View`
+  width: 60%;
+  height: 20;
+  background-color: gray;
+  opacity: 0.7;
+  border: 1px solid gray;
+  border-radius: 5;
+  align-items: center;
+  justify-content: center;
+`;
+
+const BusIconView = styled.View`
+  position: absolute;
+  top: 50%;
+  right: -5;
+  height: 12;
+  width: 16;
+  margin-top: -6;
+  background-color: #fff;
+  align-items: center;
+  justify-content: center;
+  z-index: 99;
+`;
+const BusIconBarView = styled.View`
+  width: 6;
+  height: ${props => (props.starts || props.ends ? "50%" : "100%")};
+  background-color: red;
+`;
+
+const ScrollCardLeft = ({ starts, ends, bus }) => {
+  return (
+    <ScrollCardLeftView ends={ends}>
+      {bus ? (
+        <BusIconNumView>
+          <BusIconNum>
+            <Text>6029</Text>
+          </BusIconNum>
+        </BusIconNumView>
+      ) : (
+        <></>
+      )}
+
+      <BusIconView>
+        {bus ? (
+          <Ionicons color="green" size={24} name={"ios-bus"} />
+        ) : (
+          <Ionicons color="#000" size={16} name={"ios-arrow-dropdown"} />
+        )}
+      </BusIconView>
+      <BusIconBarView starts={starts} ends={ends} />
+    </ScrollCardLeftView>
+  );
+};
+
+const ScrollCardRightView = styled.View`
+  flex: 3;
+  justify-content: center;
+  padding-left: 10;
+  border-bottom-width: ${StyleSheet.hairlineWidth};
+`;
+const ScrollCardRight = () => {
+  return (
+    <ScrollCardRightView>
+      <CommonText fontSize={14}>한일병원</CommonText>
+      <View style={{ flexDirection: "row" }}>
+        <CommonText fontSize={12} color={"#9E9696"}>
+          10503
+        </CommonText>
+        <CommonText fontSize={12} color={"#9E9696"} marginLeft={10}>
+          05:30 ~ 23:40
+        </CommonText>
+      </View>
+    </ScrollCardRightView>
+  );
+};
+
+const ScrollCardContView = styled.View`
+  flex-direction: row;
+  height: 70;
+  width: 100%;
+`;
+
+const ScrollCardCont = ({ starts, ends, bus }) => {
   return (
     <>
-      <CardBus goBusInfo={goBusInfo} />
-      <CardBus goBusInfo={goBusInfo} />
-      <CardBus goBusInfo={goBusInfo} />
-      <CardBus goBusInfo={goBusInfo} />
-      <CardBus goBusInfo={goBusInfo} />
-      <CardBus goBusInfo={goBusInfo} />
-      <CardBus goBusInfo={goBusInfo} />
-      <CardBus goBusInfo={goBusInfo} />
-      <CardBus goBusInfo={goBusInfo} />
-      <CardBus goBusInfo={goBusInfo} />
-      <CardBus goBusInfo={goBusInfo} />
-      <CardBus goBusInfo={goBusInfo} />
+      <ScrollCardContView>
+        <ScrollCardLeft starts={starts} ends={ends} bus={bus} />
+        <ScrollCardRight />
+      </ScrollCardContView>
     </>
   );
 };
@@ -224,9 +312,7 @@ class BusInfoScreen extends React.Component {
         <Animated.ScrollView
           style={{
             flex: 1,
-            backgroundColor: "transparent",
-            height: "100%",
-            width: "100%"
+            backgroundColor: "transparent"
           }}
           scrollEventThrottle={1}
           onScroll={Animated.event(
@@ -253,7 +339,17 @@ class BusInfoScreen extends React.Component {
           }}
         >
           <ScrollContainer>
-            <ScrollCardCont goBusInfo={_goBusInfo} />
+            <ScrollCardCont starts={true} />
+            <ScrollCardCont />
+            <ScrollCardCont />
+            <ScrollCardCont />
+            <ScrollCardCont bus={true} />
+            <ScrollCardCont />
+            <ScrollCardCont />
+            <ScrollCardCont />
+            <ScrollCardCont />
+            <ScrollCardCont />
+            <ScrollCardCont ends={true} />
           </ScrollContainer>
         </Animated.ScrollView>
 

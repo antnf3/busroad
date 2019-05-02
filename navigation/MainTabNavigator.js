@@ -51,9 +51,15 @@ HomeStack.navigationOptions = {
   )
 };
 
-const SearchStack = createStackNavigator({
-  Search: SubTabNavigator
-});
+const SearchStack = createStackNavigator(
+  {
+    Search: SubTabNavigator
+  },
+  {
+    mode: "modal",
+    headerMode: "none"
+  }
+);
 
 SearchStack.navigationOptions = {
   tabBarLabel: "검색",
