@@ -18,7 +18,7 @@ export default class MapInfoScreen extends React.Component {
     return (
       <Container>
         <Text>지도</Text>
-        <TouchableOpacity onPressOut={() => this.props.navigation.goBack(null)}>
+        <TouchableOpacity onPress={() => this.props.navigation.goBack(null)}>
           <Ionicons
             style={styles.headerBack}
             color="black"

@@ -128,9 +128,7 @@ class DrawerLocalArea extends Component {
             </LocaleText>
           </TitleLeft>
           <TitleRight>
-            <TouchableOpacity
-              onPressOut={() => this.setState({ onOff: !onOff })}
-            >
+            <TouchableOpacity onPress={() => this.setState({ onOff: !onOff })}>
               <FontAwesome
                 color="black"
                 size={40}

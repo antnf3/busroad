@@ -18,7 +18,7 @@ export default class MyAroundListScreen extends React.Component {
     return (
       <Container>
         <Text>내주변 리스트</Text>
-        <TouchableOpacity onPressOut={() => this.props.navigation.goBack(null)}>
+        <TouchableOpacity onPress={() => this.props.navigation.goBack(null)}>
           <Ionicons
             style={styles.headerBack}
             color="black"

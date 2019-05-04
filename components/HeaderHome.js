@@ -35,7 +35,7 @@ const HeaderTmp = styled.View`
 const HeaderHome = ({ toggleDrawer, goSearch }) => {
   return (
     <Header>
-      <TouchableOpacity onPressOut={toggleDrawer}>
+      <TouchableOpacity onPress={toggleDrawer}>
         <Ionicons
           style={styles.headerBack}
           color="black"
@@ -43,7 +43,7 @@ const HeaderHome = ({ toggleDrawer, goSearch }) => {
           name={"ios-menu"}
         />
       </TouchableOpacity>
-      <TouchableOpacity onPressOut={goSearch}>
+      <TouchableOpacity onPress={goSearch}>
         <HeaderText>버스 또는 정류장 검색</HeaderText>
       </TouchableOpacity>
       <HeaderTmp />

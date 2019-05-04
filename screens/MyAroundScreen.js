@@ -19,7 +19,7 @@ export default class MyAroundScreen extends React.Component {
     return (
       <Container>
         <Text>내주변</Text>
-        <TouchableOpacity onPressOut={() => this.props.navigation.goBack(null)}>
+        <TouchableOpacity onPress={() => this.props.navigation.goBack(null)}>
           <Ionicons
             style={styles.headerBack}
             color="black"
@@ -28,7 +28,7 @@ export default class MyAroundScreen extends React.Component {
           />
         </TouchableOpacity>
         <TouchableOpacity
-          onPressOut={() => this.props.navigation.navigate("MyAroundList")}
+          onPress={() => this.props.navigation.navigate("MyAroundList")}
         >
           <Text>내주변 목록</Text>
         </TouchableOpacity>

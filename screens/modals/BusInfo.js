@@ -68,7 +68,7 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 const HeaderNavView = ({ goBack }) => {
   return (
     <HeaderNav>
-      <TouchableOpacity onPressOut={goBack}>
+      <TouchableOpacity onPress={goBack}>
         <Ionicons
           style={styles.headerBack}
           color="#fff"
@@ -77,7 +77,7 @@ const HeaderNavView = ({ goBack }) => {
         />
       </TouchableOpacity>
 
-      <TouchableOpacity onPressOut={goBack}>
+      <TouchableOpacity onPress={goBack}>
         <Ionicons
           style={styles.headerBack}
           color="#fff"
@@ -113,10 +113,10 @@ const MapBtn = () => {
 const HeaderBtnView = ({ goMap, goBusDetail }) => {
   return (
     <>
-      <TouchableOpacity onPressOut={goBusDetail}>
+      <TouchableOpacity onPress={goBusDetail}>
         <InfoBtn goBusDetail={goBusDetail} />
       </TouchableOpacity>
-      <TouchableOpacity onPressOut={goMap}>
+      <TouchableOpacity onPress={goMap}>
         <MapBtn />
       </TouchableOpacity>
       <TouchableOpacity>
@@ -219,18 +219,20 @@ const ScrollCardRightView = styled.View`
   padding-left: 10;
   border-bottom-width: ${StyleSheet.hairlineWidth};
 `;
-const ScrollCardRight = () => {
+const ScrollCardRight = ({ goStation }) => {
   return (
     <ScrollCardRightView>
-      <CommonText fontSize={14}>한일병원</CommonText>
-      <View style={{ flexDirection: "row" }}>
-        <CommonText fontSize={12} color={"#9E9696"}>
-          10503
-        </CommonText>
-        <CommonText fontSize={12} color={"#9E9696"} marginLeft={10}>
-          05:30 ~ 23:40
-        </CommonText>
-      </View>
+      <TouchableOpacity onPress={goStation}>
+        <CommonText fontSize={14}>한일병원</CommonText>
+        <View style={{ flexDirection: "row" }}>
+          <CommonText fontSize={12} color={"#9E9696"}>
+            10503
+          </CommonText>
+          <CommonText fontSize={12} color={"#9E9696"} marginLeft={10}>
+            05:30 ~ 23:40
+          </CommonText>
+        </View>
+      </TouchableOpacity>
     </ScrollCardRightView>
   );
 };
@@ -241,12 +243,12 @@ const ScrollCardContView = styled.View`
   width: 100%;
 `;
 
-const ScrollCardCont = ({ starts, ends, bus }) => {
+const ScrollCardCont = ({ starts, ends, bus, goStation }) => {
   return (
     <>
       <ScrollCardContView>
         <ScrollCardLeft starts={starts} ends={ends} bus={bus} />
-        <ScrollCardRight />
+        <ScrollCardRight goStation={goStation} />
       </ScrollCardContView>
     </>
   );
@@ -268,7 +270,7 @@ class BusInfoScreen extends React.Component {
   static navigationOptions = {
     title: "정류장 정보"
   };
-
+  _goStation = () => this.props.navigation.navigate("Station");
   render() {
     const scrollY = Animated.add(
       this.state.scrollY,
@@ -306,6 +308,7 @@ class BusInfoScreen extends React.Component {
     _goMap = () => this.props.navigation.navigate("MapInfo");
     _goBack = () => this.props.navigation.goBack(null);
     _goBusInfo = () => this.props.navigation.navigate("BusInfo");
+
     return (
       <Container>
         <HeaderNavView goBack={_goBack} />
@@ -339,17 +342,17 @@ class BusInfoScreen extends React.Component {
           }}
         >
           <ScrollContainer>
-            <ScrollCardCont starts={true} />
-            <ScrollCardCont />
-            <ScrollCardCont />
-            <ScrollCardCont />
-            <ScrollCardCont bus={true} />
-            <ScrollCardCont />
-            <ScrollCardCont />
-            <ScrollCardCont />
-            <ScrollCardCont />
-            <ScrollCardCont />
-            <ScrollCardCont ends={true} />
+            <ScrollCardCont starts={true} goStation={this._goStation} />
+            <ScrollCardCont goStation={this._goStation} />
+            <ScrollCardCont goStation={this._goStation} />
+            <ScrollCardCont goStation={this._goStation} />
+            <ScrollCardCont bus={true} goStation={this._goStation} />
+            <ScrollCardCont goStation={this._goStation} />
+            <ScrollCardCont goStation={this._goStation} />
+            <ScrollCardCont goStation={this._goStation} />
+            <ScrollCardCont goStation={this._goStation} />
+            <ScrollCardCont goStation={this._goStation} />
+            <ScrollCardCont ends={true} goStation={this._goStation} />
           </ScrollContainer>
         </Animated.ScrollView>
 

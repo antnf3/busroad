@@ -13,7 +13,7 @@ const CommonText = styled.Text`
 const ButtonBus = ({ goStation }) => {
   return (
     <TouchableOpacity
-      onPressOut={goStation}
+      onPress={goStation}
       style={{
         flexDirection: "row",
         width: 80,

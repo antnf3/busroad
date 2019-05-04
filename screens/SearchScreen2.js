@@ -19,7 +19,7 @@ export default class SearchScreen2 extends React.Component {
     return (
       <Container>
         <Text>Search2</Text>
-        <TouchableOpacity onPressOut={() => this.props.navigation.goBack(null)}>
+        <TouchableOpacity onPress={() => this.props.navigation.goBack(null)}>
           <Ionicons
             style={styles.headerBack}
             color="black"

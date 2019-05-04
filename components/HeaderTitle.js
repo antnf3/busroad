@@ -28,7 +28,7 @@ const HeaderTmp = styled.View`
 const HeaderTitle = ({ goBack, htitle }) => {
   return (
     <Header>
-      <TouchableOpacity onPressOut={goBack}>
+      <TouchableOpacity onPress={goBack}>
         <Ionicons
           style={styles.headerBack}
           color="black"

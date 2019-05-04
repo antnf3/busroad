@@ -33,7 +33,7 @@ const ScrollDivRight = styled.View`
 
 const CardStation = ({ isTop, goStation }) => {
   return (
-    <TouchableOpacity onPressOut={goStation}>
+    <TouchableOpacity onPress={goStation}>
       <ScrollCard isTop={isTop}>
         <ScrollDivLeft>
           <CommonText fontSize={20} color={"#0A0A0A"} marginLeft={10}>

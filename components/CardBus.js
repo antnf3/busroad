@@ -60,7 +60,7 @@ const ScrollCardBusTime = ({ flag }) => {
 
 const CardBus = ({ goBusInfo }) => {
   return (
-    <TouchableOpacity onPressOut={goBusInfo}>
+    <TouchableOpacity onPress={goBusInfo}>
       <ScrollCard>
         <ScrollDivLeft>
           <CommonText fontSize={12} color={"#5090EF"} marginLeft={10}>

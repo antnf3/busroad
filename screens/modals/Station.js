@@ -60,7 +60,7 @@ const ScrollContainer = styled.ScrollView`
 const HeaderBtnView = ({ goMap }) => {
   return (
     <>
-      <TouchableOpacity onPressOut={goMap}>
+      <TouchableOpacity onPress={goMap}>
         <MapBtn />
       </TouchableOpacity>
       <TouchableOpacity>
@@ -85,7 +85,7 @@ const Header = ({ goBack, goMap }) => {
   return (
     <HeaderView>
       <HeaderNav>
-        <TouchableOpacity onPressOut={goBack}>
+        <TouchableOpacity onPress={goBack}>
           <Ionicons
             style={styles.headerBack}
             color="#fff"
@@ -93,7 +93,7 @@ const Header = ({ goBack, goMap }) => {
             name={"ios-arrow-round-back"}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPressOut={goBack}>
+        <TouchableOpacity onPress={goBack}>
           <Ionicons
             style={styles.headerBack}
             color="#fff"
