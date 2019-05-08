@@ -23,7 +23,18 @@ SearchStack.navigationOptions = {
           : "md-information-circle"
       }
     />
-  )
+  ),
+  tabBarOptions: {
+    activeTintColor: "#F50A0A",
+    inactiveTintColor: "#AFACAC",
+    pressColor: "gray",
+    style: {
+      backgroundColor: "#fff"
+    },
+    labelStyle: {
+      fontSize: 18
+    }
+  }
 };
 
 const SearchStack2 = createStackNavigator({
@@ -40,7 +51,18 @@ SearchStack2.navigationOptions = {
           : "md-information-circle"
       }
     />
-  )
+  ),
+  tabBarOptions: {
+    activeTintColor: "#F50A0A",
+    inactiveTintColor: "#AFACAC",
+    pressColor: "gray",
+    style: {
+      backgroundColor: "#fff"
+    },
+    labelStyle: {
+      fontSize: 18
+    }
+  }
 };
 
 export default createMaterialTopTabNavigator(
@@ -49,18 +71,7 @@ export default createMaterialTopTabNavigator(
     SearchStack2
   },
   {
-    tabBarPosition: "top",
-    tabBarOptions: {
-      labelStyle: {
-        fontSize: 16,
-        color: "black"
-      },
-      // tabStyle: {
-      //   width: 100
-      // },
-      style: {
-        backgroundColor: "pink"
-      }
-    }
+    // tabBarComponent: () => null,
+    tabBarPosition: "top"
   }
 );

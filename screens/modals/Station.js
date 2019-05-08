@@ -1,5 +1,13 @@
 import React from "react";
-import { TouchableOpacity, StyleSheet } from "react-native";
+import {
+  TouchableOpacity,
+  StyleSheet,
+  Modal,
+  TouchableHighlight,
+  Text,
+  View,
+  Alert
+} from "react-native";
 import styled from "styled-components";
 import { Ionicons } from "@expo/vector-icons";
 import CardBus from "../../components/CardBus";
@@ -57,13 +65,13 @@ const ScrollContainer = styled.ScrollView`
   margin-top: 10;
 `;
 
-const HeaderBtnView = ({ goMap }) => {
+const HeaderBtnView = ({ goMap, popUp }) => {
   return (
     <>
       <TouchableOpacity onPress={goMap}>
         <MapBtn />
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={popUp}>
         <Ionicons color="#fff" size={28} name={"ios-star-outline"} />
       </TouchableOpacity>
     </>
@@ -81,7 +89,7 @@ const MapBtn = () => {
   );
 };
 
-const Header = ({ goBack, goMap }) => {
+const Header = ({ goBack, goMap, popUp }) => {
   return (
     <HeaderView>
       <HeaderNav>
@@ -114,7 +122,7 @@ const Header = ({ goBack, goMap }) => {
       </CommonText>
 
       <HeaderBtn>
-        <HeaderBtnView goMap={goMap} />
+        <HeaderBtnView goMap={goMap} popUp={popUp} />
       </HeaderBtn>
     </HeaderView>
   );
@@ -139,16 +147,40 @@ class StationScreen extends React.Component {
     title: "정류장 정보"
   };
 
-  render() {
-    _goBusInfo = () => this.props.navigation.navigate("BusInfo");
-    _goMap = () => this.props.navigation.navigate("MapInfo");
-    _goBack = () => this.props.navigation.goBack(null);
+  _twoOptionAlertHandler = () => {
+    //function to make two option alert
+    Alert.alert(
+      //title
+      "즐겨찾기를 삭제하시겠습니까?",
+      //body
+      "함께 저장한 버스 즐겨찾기도 삭제됩니다.",
+      [
+        { text: "취소", onPress: () => console.log("취소 Pressed") },
+        {
+          text: "확인",
+          onPress: () => console.log("확인 Pressed"),
+          style: "cancel"
+        }
+      ],
+      { cancelable: false }
+      //clicking out side of alert will not cancel
+    );
+  };
 
+  _goBusInfo = () => this.props.navigation.navigate("BusInfo");
+  _goMap = () => this.props.navigation.navigate("MapInfo");
+  _goBack = () => this.props.navigation.goBack(null);
+
+  render() {
     return (
       <Container>
-        <Header goBack={_goBack} goMap={_goMap} />
+        <Header
+          goBack={this._goBack}
+          goMap={this._goMap}
+          popUp={this._twoOptionAlertHandler}
+        />
         <ScrollContainer>
-          <ScrollCardCont goBusInfo={_goBusInfo} />
+          <ScrollCardCont goBusInfo={this._goBusInfo} />
         </ScrollContainer>
       </Container>
     );

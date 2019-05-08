@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacity, StyleSheet } from "react-native";
+import { TouchableOpacity, StyleSheet, TextInput } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import styled from "styled-components";
 import PropTypes from "prop-types";
@@ -14,6 +14,19 @@ const Header = styled.View`
   elevation: 7;
 `;
 
+const HeaderText = styled.TextInput`
+  height: 40;
+  width: 250;
+  border-radius: 5;
+  background: #ececec;
+  color: #bcacac;
+  text-align: left;
+  text-align-vertical: center;
+  letter-spacing: 2;
+  padding-left: 5;
+  elevation: 5;
+`;
+
 const HTitle = styled.Text`
   font-size: 24;
   color: #4e4a4a;
@@ -21,15 +34,13 @@ const HTitle = styled.Text`
 const HeaderTmp = styled.View`
   background-color: transparent;
   width: 50;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
+  height: 50;
 `;
 
-const HeaderTitle = ({ goBack, htitle, map }) => {
+const HeaderSearch = ({ goHome, htitle }) => {
   return (
     <Header>
-      <TouchableOpacity onPress={goBack}>
+      <TouchableOpacity onPress={goHome}>
         <Ionicons
           style={styles.headerBack}
           color="black"
@@ -37,21 +48,8 @@ const HeaderTitle = ({ goBack, htitle, map }) => {
           name={"ios-arrow-round-back"}
         />
       </TouchableOpacity>
-      <HTitle>{htitle}</HTitle>
-      {map ? (
-        <HeaderTmp>
-          <TouchableOpacity onPress={map}>
-            <Ionicons
-              style={styles.headerBack}
-              color="gray"
-              size={32}
-              name={"ios-list"}
-            />
-          </TouchableOpacity>
-        </HeaderTmp>
-      ) : (
-        <HeaderTmp />
-      )}
+      <HeaderText placeholder={htitle} />
+      <HeaderTmp />
     </Header>
   );
 };
@@ -64,4 +62,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default HeaderTitle;
+export default HeaderSearch;

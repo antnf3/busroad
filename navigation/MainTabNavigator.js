@@ -1,5 +1,5 @@
 import React from "react";
-import { Platform } from "react-native";
+import { Platform, Text } from "react-native";
 import {
   createStackNavigator,
   createMaterialTopTabNavigator
@@ -32,7 +32,7 @@ const HomeStack = createStackNavigator(
     }
   },
   {
-    mode: "modal",
+    mode: "card",
     headerMode: "none"
   }
 );
@@ -53,15 +53,28 @@ HomeStack.navigationOptions = {
 
 const SearchStack = createStackNavigator(
   {
-    Search: SubTabNavigator
+    Search: SubTabNavigator,
+    BusInfo: {
+      screen: BusInfoScreen
+    },
+    Station: {
+      screen: StationScreen
+    },
+    BusDetail: {
+      screen: BusDetailScreen
+    },
+    MapInfo: {
+      screen: MapInfoScreen
+    }
   },
   {
-    mode: "modal",
+    mode: "card",
     headerMode: "none"
   }
 );
 
 SearchStack.navigationOptions = {
+  headerTitle: "Header title",
   tabBarLabel: "검색",
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -76,10 +89,19 @@ const MyAroundStack = createStackNavigator(
     MyAround: MyAroundScreen,
     MyAroundList: {
       screen: MyAroundListScreen
+    },
+    MapInfo: {
+      screen: MapInfoScreen
+    },
+    Station: {
+      screen: StationScreen
+    },
+    BusDetail: {
+      screen: BusDetailScreen
     }
   },
   {
-    mode: "modal",
+    mode: "card",
     headerMode: "none"
   }
 );
